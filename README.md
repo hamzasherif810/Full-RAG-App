@@ -36,3 +36,9 @@ $ cp .env.example .env
 ```
 
 Set your environment variables in the `.env` file. Like `OPEN_AI_KEY` value.
+
+## Run the FastAPI
+
+```bash
+$ uvicorn main:app --host 0.0.0.0 --port 5000
+```
