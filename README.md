@@ -2,7 +2,7 @@
 This is a minimal implementation of the RAG model for question answering.
 
 ## Requirements
-- Python 3.8 or later
+- Python 3.14 or later
 
 ### Install python using Miniconda
 
@@ -35,10 +35,10 @@ $ pip install -r requirements.txt
 $ cp .env.example .env
 ```
 
-Set your environment variables in the `.env` file. Like `OPEN_AI_KEY` value.
+Set your environment variables in the `.env` file to your specific values.
 
 ## Run the FastAPI
 
 ```bash
-$ uvicorn main:app --host 0.0.0.0 --port 5000
+$ uvicorn main:app --reload --host 0.0.0.0 --port 5000
 ```
