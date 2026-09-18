@@ -17,6 +17,12 @@ $ conda create --name mini-rag
 $ conda activate mini-rag
 ```
 
+## Installation
+
+### (Optional) Setup you command line interface for better readability
+```bash
+$ export PS1="\[\033[01;32m\]\u@\h:\w\n\[\033[00m\]\$ "
+```
 ### Install Python
 
 - Python 3.14 or later
@@ -37,7 +43,7 @@ $ cp .env.example .env
 ```
 Then assign the keys your own values.
 
-## Run the FastAPI
+## Run the FastAPI server
 Make sure you are in the /src in the terminal
 ```bash
 $ uvicorn main:app --reload
