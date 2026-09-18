@@ -42,7 +42,7 @@ async def upload_data(project_id: str, file: UploadFile, app_settings: Settings 
     # So, there must be a way of creating a unique name of each file uploaded
     # We will do this by striping the name of eachfile uploaded and then concatinating it with the project-id and a unique string of length 12 chars.
     # And this is definitely a logic so it will be implemented inside the controllers.
-    file_path = data_controller.generate_unique_filename(orig_file_name=file.filename, project_id=project_id)
+    file_path, file_id = data_controller.generate_unique_filepath(orig_file_name=file.filename, project_id=project_id)
 
 
     # Write the file content into the file path in binary format chunk by chunk
@@ -63,6 +63,7 @@ async def upload_data(project_id: str, file: UploadFile, app_settings: Settings 
     
     return JSONResponse(
         content = {
-            "signal" : ResponseSignal.FILE_UPLOAD_SUCCESS.value
+            "signal" : ResponseSignal.FILE_UPLOAD_SUCCESS.value,
+            "file_id" : file_id
         }
     )

@@ -21,7 +21,7 @@ class DataController(BaseController):
         
         return True, ResponseSignal.FILE_UPLOAD_SUCCESS.value, file.content_type 
 
-    def generate_unique_filename(self, orig_file_name: str, project_id: str):
+    def generate_unique_filepath(self, orig_file_name: str, project_id: str):
         # this function creates the new file name path which consists of the path of the project_id specific folder, then the new file name which is a combination of a random string of 12 chars and the cleaned filename.
 
         random_number = self.generate_random_string()
@@ -43,7 +43,7 @@ class DataController(BaseController):
                         random_number + '_' + cleaned_file_name
                     )
 
-        return new_file_path
+        return new_file_path, random_number + '_' + cleaned_file_name
 
 
     def get_clean_filename(self, filename: str):
