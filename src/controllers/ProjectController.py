@@ -4,7 +4,8 @@ import os
 class ProjectController(BaseController):
     def __init__(self):
         super().__init__()
-
+        
+    # This function creates the project-id specific directory if it doesn't exist and return the proj_dir_path
     def get_project_path(self, project_id: str):
         proj_dir_path = os.path.join(
             self.files_dir,
