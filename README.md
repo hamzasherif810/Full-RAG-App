@@ -48,3 +48,15 @@ Make sure you are in the /src in the terminal
 ```bash
 $ uvicorn main:app --reload
 ```
+
+## Run Docker Compose Services
+
+```bash
+$ cd docker
+$ cp .env.examlpe .env
+```
+- Update `.env` with your credentials
+- Then compose the services
+```bash
+$ sudo docker compose up -d
+```
