@@ -19,6 +19,9 @@ class BaseController:
     
     def generate_random_string(self, length: int = 12):
         random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=length))
+        
         return random_string
+    
+
 
         
