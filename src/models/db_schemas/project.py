@@ -10,7 +10,7 @@ class Project(BaseModel):
     # standard library objects (like datetime or UUID). If you give it a complex object from a third-party library, Pydantic doesn't know how to verify its structure, so it throws a PydanticSchemaGenerationError.
     # You use it specifically to stop Pydantic from crashing when it encounters the ObjectId data type.
 
-    _id: Optional[ObjectId]
+    id: Optional[ObjectId] = Field(default= None, alias="_id")
     # When you pull a document back from MongoDB (which naturally has a _id key), you can do Project(**doc) and it will populate id via the alias automatically.
     # When sending back to MongoDB, use p.model_dump(by_alias=True) so it comes out as _id again.
 
@@ -25,7 +25,8 @@ class Project(BaseModel):
         return value
 
     model_config = ConfigDict(
-        arbitrary_types_allowed=True
+        arbitrary_types_allowed=True,
+        populate_by_name=True
     )
 
     # This is the function that will be used in the ProjectModel to create the indexes needed.

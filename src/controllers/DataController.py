@@ -19,7 +19,7 @@ class DataController(BaseController):
         if file.size > self.app_settings.FILE_MAX_SIZE * self.size_scale:
             return False, ResponseSignal.FILE_SIZE_EXCEEDED.value, file.content_type 
         
-        return True, ResponseSignal.FILE_UPLOAD_SUCCESS.value, file.content_type 
+        return True, ResponseSignal.FILE_UPLOAD_SUCCESS.value, file.content_type, file.size
 
     def generate_unique_filepath(self, orig_file_name: str, project_id: str):
         # this function creates the new file name path which consists of the path of the project_id specific folder, then the new file name which is a combination of a random string of 12 chars and the cleaned filename.

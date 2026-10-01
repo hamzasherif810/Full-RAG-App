@@ -6,8 +6,7 @@ import pymongo
 
 class DataChunk(BaseModel):
 
-    _id: Optional[ObjectId]
-    # The _id property is set to Optional because you doesn't have to add it yourself, the monogdb creates it automatically if you didn't.
+    id: Optional[ObjectId] = Field(default= None, alias="_id")
     chunk_text: str = Field(..., min_length=1)
     # The Field function adds extra validation rules and metadata to the property.
     # The ellipses (...) means that the field is strictly required, it can't be skipped.
@@ -16,8 +15,10 @@ class DataChunk(BaseModel):
     # Must be greater than 0
     chunk_insertion_date: str
     chunk_project_id: ObjectId
+    chunk_asset_id: ObjectId
     model_config = ConfigDict(
-        arbitrary_types_allowed=True
+        arbitrary_types_allowed=True,
+        populate_by_name=True
     )
 
     @classmethod
@@ -31,3 +32,4 @@ class DataChunk(BaseModel):
                 "unique": False # Because multiple chunks can belong to the same project_id
             }
         ]
+    # get_indexes returns a list of dictionaries, each dictionary represents an index. Index can be multiproperty index.
