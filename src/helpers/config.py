@@ -20,6 +20,21 @@ class Settings(BaseSettings):
     MONGODB_URL: str
     MONGODB_DATABASE: str
 
+    GENERATION_BACKEND: str = None
+    EMBEDDING_BACKEND: str = None
+
+    OPENAI_API_KEY: str = None
+    OPENAI_BASE_URL: str = None
+    COHERE_API_KEY: str = None
+
+    GENERATION_MODEL_ID: str = None
+    EMBEDDING_MODEL_ID: str = None
+    EMBEDDING_MODEL_SIZE: int = None
+
+    INPUT_DEFAULT_MAX_TOKENS: int
+    GENERATION_DEFAULT_MAX_TOKENS = 200
+    GENERATION_DEFAULT_TEMPERATURE = 0.1
+
 
 def get_settings():
     return Settings()
