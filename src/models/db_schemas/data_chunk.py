@@ -18,7 +18,7 @@ class DataChunk(BaseModel):
     chunk_asset_id: ObjectId
     model_config = ConfigDict(
         arbitrary_types_allowed=True,
-        populate_by_name=True
+        populate_by_name=True # lets you fill a field using either its alias or its real Python name. Without it, once a field has an alias, only the alias works for input.
     )
 
     @classmethod
@@ -33,3 +33,8 @@ class DataChunk(BaseModel):
             }
         ]
     # get_indexes returns a list of dictionaries, each dictionary represents an index. Index can be multiproperty index.
+
+
+class RetrievedDocument(BaseModel):
+    text: str
+    score: float
