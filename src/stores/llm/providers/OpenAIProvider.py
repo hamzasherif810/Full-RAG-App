@@ -31,11 +31,12 @@ class OpenAIProvider(LLMInterface):
         )
 
         self.logger = logging.getLogger(__name__)
+        self.enums = OpenAIEnums
 
     def set_generation_model(self, model_id: str):
         self.generation_model_id = model_id
 
-    def set_embedding_model(self, model_id: str, embedding_size: int):
+    def set_embedding_model_and_size(self, model_id: str, embedding_size: int):
         self.embedding_model_id = model_id
         self.embedding_size = embedding_size
 
@@ -61,18 +62,22 @@ class OpenAIProvider(LLMInterface):
         max_output_tokens = max_output_tokens if max_output_tokens else self.default_generation_max_output_tokens
         temperature = temperature if temperature is not None else self.default_generation_temperature
 
-
+        prompt = self.process_text(prompt)
+        
         chat_history.append(
-            self.construct_prompt(prompt=self.process_text(prompt), role=OpenAIEnums.USER.value)
+            self.construct_prompt(prompt=prompt, role=OpenAIEnums.USER.value)
         )
 
-        response = self.client.chat.completions.create(
-            model=self.generation_model_id,
-            messages=chat_history,
-            max_completion_tokens=max_output_tokens,
-            temperature=temperature
-        )
-
+        try:
+            response = self.client.chat.completions.create(
+                model=self.generation_model_id,
+                messages=chat_history,
+                max_completion_tokens=max_output_tokens,
+                #temperature=temperature
+            )
+        except Exception as e:
+            return f"error here {chat_history} {e}"
+        
         if not response or not response.choices or not response.choices[0].message:
             self.logger.error("Error while generating text with OpenAI")
             return None
@@ -106,11 +111,14 @@ class OpenAIProvider(LLMInterface):
         return response.data[0].embedding
     
 
-    def construct_prompt(self,
-                         prompt: str,
-                         role: str):
-
+    def construct_prompt(self, prompt: str, role: str):
         return {
             "role": role,
             "content": prompt
         }
+    
+    def construct_system_prompt(self, prompt: str):
+            return {
+                "role": self.enums.DEVELOPER.value,
+                "content": prompt
+            }

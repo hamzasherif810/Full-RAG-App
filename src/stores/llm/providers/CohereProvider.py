@@ -28,12 +28,13 @@ class CohereProvider(LLMInterface):
         )
 
         self.logger = logging.getLogger(__name__)
+        self.enums = CohereEnums
 
     def set_generation_model(self,
                              model_id: str):
         self.generation_model_id = model_id
 
-    def set_embedding_model(self,
+    def set_embedding_model_and_size(self,
                             model_id: str,
                             embedding_size: int):
         self.embedding_model_id = model_id
@@ -56,7 +57,9 @@ class CohereProvider(LLMInterface):
             self.logger.error("Generation model for CoHere was not set")
             return None
 
-        chat_history.append(self.construct_prompt(role=CohereEnums.USER.value, prompt=self.process_text(prompt)))
+        prompt = self.process_text(prompt)
+
+        chat_history.append(self.construct_prompt(role=CohereEnums.USER.value, prompt=prompt))
 
         max_output_tokens = max_output_tokens if max_output_tokens else self.default_generation_max_output_tokens
         temperature = temperature if temperature is not None else self.default_generation_temperature
@@ -75,9 +78,7 @@ class CohereProvider(LLMInterface):
         return response.message.content[0].text
     
 #================================================== Embed text ====================================================================================        
-    def embed_text(self,
-                   text: str,
-                   document_type: str = None):
+    def embed_text(self, text: str, document_type: str = None):
 
         if not self.client:
             self.logger.error("CoHere client was not set")
@@ -100,6 +101,8 @@ class CohereProvider(LLMInterface):
             output_dimension=self.embedding_size, # embedding size of each text
             embedding_types=["float"] # can be one or more. may be you can also add int8, uint8, ... and you will get for each text all these types of embeddings.
         )
+        # Cohere only introduced the output_dimension parameter starting with their newer embed-v4 models.
+        # For embed-multilingual-v3.0 (and all other v3 variants), the output dimension is permanently locked at 1,024 dimensions and cannot be dynamically altered in the API request.
 
         if not response or not response.embeddings or not response.embeddings.float:
             self.logger.error("Error while embedding text with CoHere")
@@ -107,10 +110,14 @@ class CohereProvider(LLMInterface):
 
         return response.embeddings.float[0]
 
-    def construct_prompt(self,
-                         prompt: str,
-                         role: str):
+    def construct_prompt(self, prompt: str, role: str):
         return {
             "role": role,
+            "content": prompt
+        }
+
+    def construct_system_prompt(self, prompt: str): 
+        return {
+            "role": self.enums.SYSTEM.value,
             "content": prompt
         }
