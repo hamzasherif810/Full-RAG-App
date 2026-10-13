@@ -12,6 +12,10 @@ class BaseController:
             self.src_dir,
             "assets/files"
         )
+        self.vectordb_dir = os.path.join(
+            self.src_dir,
+            "assets/vectordb"
+        )
 
     # if I knew the path of the controllers folder, then I have also the path of the assets folder because both are under the same directory.
     # After that, if I joined the resulting path (src directory path) with the assets/files then now I have the path of the files folder.
@@ -21,7 +25,20 @@ class BaseController:
         random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=length))
         
         return random_string
-    
+
+    def get_vectordb_path(self, vectordb_name: str) -> str:
+
+        db_path = os.path.join(
+            self.vectordb_dir,
+            vectordb_name
+        )
+
+        if not os.path.exists(db_path):
+            os.makedirs(db_path, exist_ok=True)
+        return db_path
+
+
+
 
 
         
