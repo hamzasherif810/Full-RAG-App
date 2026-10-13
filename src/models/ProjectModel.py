@@ -2,8 +2,19 @@ from .BaseDataModel import BaseDataModel
 from .db_schemas.project import Project
 from .enums.DataBaseEnum import DataBaseEnum
 from typing import Self
+"""
+The project model is your gate to communicate with the prject collection
+It also provides different methods to deal with the project collection
+These features are: 
+    
+    1) create_instance
+        This is an async function that initiates ProjectModel 
+    1) get_project_or_create_one
+        This function takes the project_id and checks whether there is a project document with that project_id in the project collection
+    2) 
 
-# This ProjectModel class is for the operations that will be performed in the projects collection.
+    To be continued...
+"""
 
 
 class ProjectModel(BaseDataModel):
@@ -78,3 +89,4 @@ class ProjectModel(BaseDataModel):
             )
 
         return projects, total_pages
+
