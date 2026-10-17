@@ -78,7 +78,7 @@ class CohereProvider(LLMInterface):
         return response.message.content[0].text
     
 #================================================== Embed text ====================================================================================        
-    def embed_text(self, text: str, document_type: str = None):
+    def embed_text(self, texts: list[str], document_type: str = None) -> list[list[float]]:
 
         if not self.client:
             self.logger.error("CoHere client was not set")
@@ -94,7 +94,7 @@ class CohereProvider(LLMInterface):
                       )
 
         response = self.client.embed(
-            texts=[text], # array of texts, each text will be embedded to a vector with size of the output_dimension. 
+            texts=texts, # array of texts, each text will be embedded to a vector with size of the output_dimension. 
             max_tokens=self.default_input_max_tokens, # max tokens of each text in the texts array
             input_type=input_type,
             model=self.embedding_model_id,
@@ -108,7 +108,7 @@ class CohereProvider(LLMInterface):
             self.logger.error("Error while embedding text with CoHere")
             return None
 
-        return response.embeddings.float[0]
+        return response.embeddings.float
 
     def construct_prompt(self, prompt: str, role: str):
         return {

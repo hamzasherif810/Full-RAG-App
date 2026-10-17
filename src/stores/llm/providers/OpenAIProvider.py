@@ -87,7 +87,7 @@ class OpenAIProvider(LLMInterface):
         
 #================================================== Embed text ====================================================================================
 
-    def embed_text(self, text: str, document_type: str = None):
+    def embed_text(self, texts: list[str], document_type: str = None)-> list[list[float]]:
         if not self.client:
             self.logger.error("OpenAI cient was not set")
             return None
@@ -98,17 +98,22 @@ class OpenAIProvider(LLMInterface):
 
         response = self.client.embeddings.create(
             model=self.embedding_model_id,
-            input=text, #  The input must not exceed the max input tokens for the model (8192 tokens for all embedding models).
+            input=texts, #  The input must not exceed the max input tokens for the model (8192 tokens for all embedding models)
             encoding_format="float",
             dimensions=self.embedding_size # The number of dimensions the resulting output embeddings should have. Only supported in text-embedding-3 and later models
         )
-
+        
         # response.data[0].embedding
-        if not response or not response.data or not response.data[0].embedding:
+        if not response or not response.data:
             self.logger.error("Error wile embedding text with OpenAI")
             return None
 
-        return response.data[0].embedding
+        vectors = []
+        for i in range(len(response.data)):
+            vectors.append(response.data[i].embedding)
+        
+        return vectors
+        
     
 
     def construct_prompt(self, prompt: str, role: str):
