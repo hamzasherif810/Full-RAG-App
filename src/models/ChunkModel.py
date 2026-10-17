@@ -66,7 +66,7 @@ class ChunkModel(BaseDataModel):
         return result.deleted_count
 
     # since we dont have how many chunks we will get, use pagination for safety
-    async def get_project_chunks(self, project_id: ObjectId, page_no: int=1, page_size: int=50):
+    async def get_project_chunks(self, project_id: ObjectId, page_no: int=1, page_size: int=100):
 
         records = await self.collection.find({
             "chunk_project_id": project_id
