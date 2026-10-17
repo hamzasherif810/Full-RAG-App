@@ -48,10 +48,8 @@ class NLPController(BaseController):
         texts = [ chunk.chunk_text for chunk in chunks]
         metadata = [ chunk.chunk_metdata for chunk in chunks]
 
-        vectors = [
-            self.embedding_client.embed_text(text=chunk.chunk_text, document_type=DocumentTypeEnum.DOCUMENT.value)
-            for chunk in chunks
-        ]
+        
+        vectors = self.embedding_client.embed_text(texts=texts, document_type=DocumentTypeEnum.DOCUMENT.value)
 
         # 3) create collection if it doesn't exist
         self.vectordb_client.create_collection(collection_name=collection_name, embedding_size=self.embedding_client.embedding_size, do_reset=do_reset)
@@ -65,7 +63,9 @@ class NLPController(BaseController):
         collection_name = self.create_collection_name(project_id=project_id)
 
         # Embed user query with the same dimension used in the target search collection
-        query_vector = self.embedding_client.embed_text(text=query, document_type=DocumentTypeEnum.QUERY.value)
+
+        query_vector = self.embedding_client.embed_text(texts=query, document_type=DocumentTypeEnum.QUERY.value)
+        query_vector = query_vector[0] # this is because embed_text returns a list of list of float.
         if not query_vector: # due to embedding failure
             return False
         # Do semantic search operation 
