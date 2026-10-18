@@ -1,5 +1,5 @@
-# mini-rag-app
-This is a minimal implementation of the RAG model for question answering.
+# Full-rag-app
+This is a full implementation of the RAG model for question answering.
 
 ## Requirements
 

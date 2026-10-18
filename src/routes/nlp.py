@@ -49,13 +49,14 @@ async def push_chunks(request: Request, project_id: str, push_request: PushReque
     inserted_items_count = 0
 
     while has_records:
-        chunks = await chunk_model.get_project_chunks(project_id=project.id, page_no=page_no)
+        
+        chunks = await chunk_model.get_project_chunks(project_id=project.id, page_no=page_no, page_size=400)
         if len(chunks) == 0:
             break
 
         is_inserted = nlp_controller.embed_and_store_data_in_vectordb(
             project=project,
-            chunks=chunks,
+            chunks=chunks, # len(chunks) max = page_size
             do_reset=push_request.do_reset if page_no == 1 else False # This logic aims to reset only the first time of the do_reset set to True. 
         )
 
